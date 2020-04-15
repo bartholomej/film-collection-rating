@@ -1,0 +1,1 @@
+export const TMDB_API_KEY = ''; // https://developers.themoviedb.org/3/getting-started/introduction

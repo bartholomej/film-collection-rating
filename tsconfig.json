@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "lib": ["es2019"],
+    "baseUrl": "./src",
+    "paths": {
+      "@interfaces/*": ["interfaces/*"]
+    },
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "strictNullChecks": false,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "strict": true,
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true
+  }
+}
