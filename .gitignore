@@ -4,6 +4,7 @@
 dist/
 zip/
 secret.ts
+*.map
 
 # Logs
 logs

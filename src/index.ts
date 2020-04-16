@@ -7,12 +7,23 @@ import { TMDB_URL, FOLDER } from './config/vars';
 
 const movieFolderPath = path.join(process.cwd(), FOLDER);
 
+const showMovie = (movies: MovieResult[]) => {
+  return movies
+    .map((movie) => {
+      return `
+          ${movie.fileName}
+          ${movie.data.title || ''}
+          ${movie.data.vote_average || ''}
+          ${movie.data.release_date || ''}
+          `;
+    })
+    .join('');
+};
+
 fs.readdir(movieFolderPath, (err, folders) => {
   const movieNames = folders.map((item) => parseTorrentName(item).title);
 
-  const movieNames$ = movieNames.map((movie) =>
-    axios.get(`${TMDB_URL}${movie}`)
-  );
+  const movieNames$ = movieNames.map((movie) => axios.get(`${TMDB_URL}${movie}`));
 
   axios
     .all(movieNames$)
@@ -23,10 +34,7 @@ fs.readdir(movieFolderPath, (err, folders) => {
             fileName: item,
             title: parseTorrentName(item).title,
             year: parseTorrentName(item).year,
-            data:
-              args[idx].status === 200 && args[idx].data.total_results > 0
-                ? args[idx].data.results[0]
-                : {},
+            data: args[idx].status === 200 && args[idx].data.total_results > 0 ? args[idx].data.results[0] : {},
           };
         });
 
@@ -44,16 +52,3 @@ fs.readdir(movieFolderPath, (err, folders) => {
       console.log(error.config);
     });
 });
-
-const showMovie = (movies: MovieResult[]) => {
-  return movies
-    .map((movie) => {
-      return `
-          ${movie.fileName}
-          ${movie.data.title || ''}
-          ${movie.data.vote_average || ''}
-          ${movie.data.release_date || ''}
-          `;
-    })
-    .join('');
-};
