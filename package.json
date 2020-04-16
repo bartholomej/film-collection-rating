@@ -8,7 +8,7 @@
     "prestart": "yarn copyhtml",
     "build": "tsc",
     "postbuild": "yarn copyhtml",
-    "copyhtml": "copyfiles --flat ./src/*.html ./dist",
+    "copyhtml": "copyfiles --flat ./src/*.html ./dist && copyfiles --flat ./src/*.css ./dist",
     "copyconfig": "node create-env",
     "build:electron": "electron dist/app.js",
     "lint": "tsc --noEmit && eslint '*/**/*.{ts,tsx}' --quiet --fix",
