@@ -16,10 +16,10 @@ const showMovie = (movies: MovieResult[]) => {
           class="card"
           title="${movie.fileName}"
           onclick="openFolder('${movieFolderPath}/${movie.fileName}')">
+            <img width="200" src="https://image.tmdb.org/t/p/w500${movie.data.poster_path}"><br />
             ${movie.data.title || ''}<br />
             ${movie.data.vote_average || ''}<br />
             ${movie.data.release_date || ''}<br />
-            <img width="100" src="https://image.tmdb.org/t/p/w500${movie.data.poster_path}">
         </div>
           `;
     })

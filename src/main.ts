@@ -21,8 +21,8 @@ export default class Main {
       webPreferences: {
         nodeIntegration: true,
       },
-      width: 800,
-      height: 600,
+      width: 1200,
+      height: 800,
     });
     Main.mainWindow.loadURL('file://' + __dirname + '/index.html');
     Main.mainWindow.on('closed', Main.onClose);
