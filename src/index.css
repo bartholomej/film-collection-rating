@@ -12,6 +12,7 @@ body {
 }
 
 .card {
+  position: relative;
   cursor: pointer;
   border-radius: 4px;
   padding: 0.5rem;
@@ -20,4 +21,21 @@ body {
 
 .card:hover {
   background: #000;
+}
+
+.card h1 {
+  font-size: 20px;
+}
+
+.card .rating {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-weight: bold;
+  font-weight: bold;
+  background: black;
+  padding: 0.5rem;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
 }

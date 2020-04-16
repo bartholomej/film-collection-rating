@@ -17,9 +17,9 @@ const showMovie = (movies: MovieResult[]) => {
           title="${movie.fileName}"
           onclick="openFolder('${movieFolderPath}/${movie.fileName}')">
             <img width="200" src="https://image.tmdb.org/t/p/w500${movie.data.poster_path}"><br />
-            ${movie.data.title || ''}<br />
-            ${movie.data.vote_average || ''}<br />
-            ${movie.data.release_date || ''}<br />
+            <h1>${movie.data.title || ''}</h1>
+            <div class="rating">${movie.data.vote_average || ''}</div>
+            <div class="release-date">${movie.data.release_date || ''}</div>
         </div>
           `;
     })
