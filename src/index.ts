@@ -4,6 +4,7 @@ import axios from 'axios';
 import parseTorrentName from 'parse-torrent-name';
 import { MovieResult } from '@interfaces/interfaces';
 import { TMDB_URL, FOLDER } from './config/vars';
+import { shell } from 'electron';
 
 const movieFolderPath = path.join(process.cwd(), FOLDER);
 
@@ -11,21 +12,29 @@ const showMovie = (movies: MovieResult[]) => {
   const html = movies
     .map((movie) => {
       return `
-          ${movie.fileName}<br />
-          ${movie.data.title || ''}<br />
-          ${movie.data.vote_average || ''}<br />
-          ${movie.data.release_date || ''}<br />
-          <img width="50" src="https://image.tmdb.org/t/p/w500${movie.data.poster_path}">
-          <br />
+        <div
+          class="card"
+          title="${movie.fileName}"
+          onclick="openFolder('${movieFolderPath}/${movie.fileName}')">
+            ${movie.data.title || ''}<br />
+            ${movie.data.vote_average || ''}<br />
+            ${movie.data.release_date || ''}<br />
+            <img width="100" src="https://image.tmdb.org/t/p/w500${movie.data.poster_path}">
+        </div>
           `;
     })
     .join('');
 
   console.log(html);
   const child = document.createElement('div');
+  child.className = 'cards';
   child.innerHTML = html;
   document.body.appendChild(child);
 };
+
+function openFolder(path: string): void {
+  shell.showItemInFolder(path);
+}
 
 fs.readdir(movieFolderPath, (err, folders) => {
   const movieNames = folders.map((item) => parseTorrentName(item).title);
