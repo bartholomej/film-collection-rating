@@ -21,7 +21,8 @@ const showMovie = (movies: MovieResult[]) => {
     })
     .join('');
 
-  var child = document.createElement('div');
+  console.log(html);
+  const child = document.createElement('div');
   child.innerHTML = html;
   document.body.appendChild(child);
 };
