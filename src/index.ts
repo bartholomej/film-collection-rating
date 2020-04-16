@@ -8,16 +8,22 @@ import { TMDB_URL, FOLDER } from './config/vars';
 const movieFolderPath = path.join(process.cwd(), FOLDER);
 
 const showMovie = (movies: MovieResult[]) => {
-  return movies
+  const html = movies
     .map((movie) => {
       return `
-          ${movie.fileName}
-          ${movie.data.title || ''}
-          ${movie.data.vote_average || ''}
-          ${movie.data.release_date || ''}
+          ${movie.fileName}<br />
+          ${movie.data.title || ''}<br />
+          ${movie.data.vote_average || ''}<br />
+          ${movie.data.release_date || ''}<br />
+          <img width="50" src="https://image.tmdb.org/t/p/w500${movie.data.poster_path}">
+          <br />
           `;
     })
     .join('');
+
+  var child = document.createElement('div');
+  child.innerHTML = html;
+  document.body.appendChild(child);
 };
 
 fs.readdir(movieFolderPath, (err, folders) => {
@@ -38,7 +44,7 @@ fs.readdir(movieFolderPath, (err, folders) => {
           };
         });
 
-        console.log(showMovie(movieResults));
+        showMovie(movieResults);
       })
     )
     .catch((error) => {

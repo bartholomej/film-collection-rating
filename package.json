@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "tsc --watch",
-    "postinstall": "yarn build",
     "build": "tsc",
+    "build:electron": "electron dist/app.js",
     "lint": "tsc --noEmit && eslint '*/**/*.{ts,tsx}' --quiet --fix",
+    "electron": "electron",
+    "postinstall": "yarn build",
     "tsc": "tsc",
     "demo": "node dist/index.js"
   },

@@ -9,13 +9,14 @@
 yarn
 ```
 
-## Demo
+## Electron
 
-Extract movies from `films` folder and print rating in console
+Run electron app with cover images
 
 ```bash
-yarn demo
+yarn build:electron
 ```
+
 
 ## Privacy Policy
 
