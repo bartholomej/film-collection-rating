@@ -5,8 +5,9 @@ import parseTorrentName from 'parse-torrent-name';
 import { MovieResult } from '@interfaces/interfaces';
 import { TMDB_URL, FOLDER } from './config/vars';
 import { shell } from 'electron';
+const { dialog } = require('electron').remote;
 
-const movieFolderPath = path.join(process.cwd(), FOLDER);
+const defaultPath = path.join(process.cwd(), FOLDER);
 
 const showMovie = (movies: MovieResult[]) => {
   const html = movies
@@ -15,7 +16,7 @@ const showMovie = (movies: MovieResult[]) => {
         <div
           class="card"
           title="${movie.fileName}"
-          onclick="openFolder('${movieFolderPath}/${movie.fileName}')">
+          onclick="openFolder('${defaultPath}/${movie.fileName}')">
             <img width="200" src="https://image.tmdb.org/t/p/w500${movie.data.poster_path}"><br />
             <h1>${movie.data.title || ''}</h1>
             <div class="rating">${movie.data.vote_average || ''}</div>
@@ -36,35 +37,40 @@ function openFolder(path: string): void {
   shell.showItemInFolder(path);
 }
 
-fs.readdir(movieFolderPath, (err, folders) => {
-  const movieNames = folders.map((item) => parseTorrentName(item).title);
+dialog.showOpenDialog({ properties: ['openDirectory'], defaultPath: defaultPath }).then((result) => {
+  if (!result.canceled) {
+    const defaultPath = result.filePaths[0];
+    fs.readdir(defaultPath, (err, folders) => {
+      const movieNames = folders.map((item) => parseTorrentName(item).title);
 
-  const movieNames$ = movieNames.map((movie) => axios.get(`${TMDB_URL}${movie}`));
+      const movieNames$ = movieNames.map((movie) => axios.get(`${TMDB_URL}${movie}`));
 
-  axios
-    .all(movieNames$)
-    .then(
-      axios.spread((...args) => {
-        const movieResults: MovieResult[] = folders.map((item, idx) => {
-          return {
-            fileName: item,
-            title: parseTorrentName(item).title,
-            year: parseTorrentName(item).year,
-            data: args[idx].status === 200 && args[idx].data.total_results > 0 ? args[idx].data.results[0] : {},
-          };
+      axios
+        .all(movieNames$)
+        .then(
+          axios.spread((...args) => {
+            const movieResults: MovieResult[] = folders.map((item, idx) => {
+              return {
+                fileName: item,
+                title: parseTorrentName(item).title,
+                year: parseTorrentName(item).year,
+                data: args[idx].status === 200 && args[idx].data.total_results > 0 ? args[idx].data.results[0] : {},
+              };
+            });
+
+            showMovie(movieResults);
+          })
+        )
+        .catch((error) => {
+          if (error.response) {
+            console.log(error.response);
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log('Error', error.message);
+          }
+          console.log(error.config);
         });
-
-        showMovie(movieResults);
-      })
-    )
-    .catch((error) => {
-      if (error.response) {
-        console.log(error.response);
-      } else if (error.request) {
-        console.log(error.request);
-      } else {
-        console.log('Error', error.message);
-      }
-      console.log(error.config);
     });
+  }
 });
